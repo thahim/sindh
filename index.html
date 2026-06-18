@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-hello
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,6 +22,24 @@ hello
         .card-orange { background: #fff3e0; color: #ef6c00; }
         .card-val { font-size: 20px; font-weight: bold; margin-top: 5px; }
         .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        /* Developer Info Footer Style */
+        .dev-footer { 
+            margin: 25px auto 10px auto; 
+            max-width: 600px; 
+            background: #f8f9fa; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .dev-logo { width: 55px; height: 55px; object-fit: contain; border-radius: 4px; }
+        .dev-text { color: #2d3748; font-size: 13px; line-height: 1.5; margin: 0; }
+        .dev-name { font-weight: bold; color: #0056b3; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -70,8 +87,16 @@ hello
     </div>
 </div>
 
+<div class="dev-footer">
+    <img src="https://raw.githubusercontent.com/thahim/sindh/main/sindh.jpg" alt="Sindh Logo" class="dev-logo">
+    <p class="dev-text">
+        Developed by <span class="dev-name">Saad Thahim</span><br>
+        Assistant Director, Minorities Affairs Department<br>
+        Government of Sindh
+    </p>
+</div>
+
 <script>
-// Complete BPS-1 se BPS-22 tak ka Scale Data (2022 vs 2026 Estimated Revised Rates)
 const scaleDetails = {
     "1":  { "2022": { min: 13550, inc: 430, max: 26450, totalStages: 30 }, "2026": { min: 16260, inc: 516, max: 31740, totalStages: 30 } },
     "2":  { "2022": { min: 13820, inc: 490, max: 28520, totalStages: 30 }, "2026": { min: 16584, inc: 588, max: 34224, totalStages: 30 } },
@@ -110,7 +135,7 @@ function init() {
             document.querySelectorAll('#bps-container .btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedBps = String(i); 
-            selectedStage = 1; // Grade change hone par default stage 1 set hogi
+            selectedStage = 1; 
             renderStages(); 
         };
         bpsContainer.appendChild(btn);
