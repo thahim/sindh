@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindh Government BPS Pay Scale Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .calculator-card { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #0056b3; color: white; padding: 20px; text-align: center; }
+        .section { padding: 20px; border-bottom: 1px solid #eee; }
+        .section-title { font-weight: bold; color: #333; margin-bottom: 15px; text-transform: uppercase; font-size: 14px; }
+        .grid-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
+        .btn { padding: 10px; border: 1px solid #ccc; background: #fff; cursor: pointer; text-align: center; border-radius: 4px; font-weight: bold; }
+        .btn.active { background: #0056b3; color: white; border-color: #0056b3; }
+        .btn-stage { font-size: 11px; padding: 8px 5px; }
+        .btn-stage.active { background: #28a745; color: white; border-color: #28a745; }
+        .comparison-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+        .card { padding: 15px; text-align: center; border-radius: 6px; }
+        .card-blue { background: #e7f3ff; color: #0056b3; }
+        .card-green { background: #e8f5e9; color: #2e7d32; }
+        .card-orange { background: #fff3e0; color: #ef6c00; }
+        .card-val { font-size: 20px; font-weight: bold; margin-top: 5px; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <div class="header">
+        <h2>Sindh Government BPS Pay Scale Calculator</h2>
+        <p>2022 vs 2026 Stage-wise Comparison</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">STEP 1: SELECT BPS GRADE</div>
+        <div class="grid-buttons" id="bps-container"></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title" id="stage-title">STEP 2: BPS-17 STAGES (2022 PAY)</div>
+        <div class="grid-buttons" id="stages-container"></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title" id="comp-title">BPS-17 - STAGE 6 PAY COMPARISON</div>
+        <div class="comparison-cards">
+            <div class="card card-blue">
+                <div>2022 Pay</div>
+                <div class="card-val" id="pay-2022">Rs. 0</div>
+            </div>
+            <div class="card card-green">
+                <div>2026 Pay</div>
+                <div class="card-val" id="pay-2026">Rs. 0</div>
+            </div>
+            <div class="card card-orange">
+                <div>Increase</div>
+                <div class="card-val" id="pay-diff">+0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">BPS SCALE DETAILS</div>
+        <div class="details-grid">
+            <div id="details-2022"></div>
+            <div id="details-2026"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Formula ke liye exact structural scale data
+const scaleDetails = {
+    "17": {
+        "2022": { min: 45070, inc: 3420, max: 113470, totalStages: 21 },
+        "2026": { min: 54133, inc: 4107, max: 136273, totalStages: 21 }
+    }
+};
+
+let selectedBps = "17";
+let selectedStage = 6;
+
+function init() {
+    const bpsContainer = document.getElementById('bps-container');
+    for (let i = 1; i <= 22; i++) {
+        let btn = document.createElement('button');
+        btn.className = `btn ${i == selectedBps ? 'active' : ''}`;
+        btn.innerText = `BPS-${i}`;
+        btn.onclick = () => { 
+            document.querySelectorAll('#bps-container .btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedBps = String(i); 
+            renderStages(); 
+        };
+        bpsContainer.appendChild(btn);
+    }
+    renderStages();
+}
+
+function renderStages() {
+    document.getElementById('stage-title').innerText = `STEP 2: BPS-${selectedBps} STAGES (2022 PAY)`;
+    const container = document.getElementById('stages-container');
+    container.innerHTML = '';
+    
+    let scale = scaleDetails[selectedBps] || { "2022": { min: 0, inc: 0, totalStages: 21 } };
+    let totalStages = scale["2022"].totalStages;
+
+    for (let s = 1; s <= totalStages; s++) {
+        // 2022 Pay Formula: Min + ((Stage - 1) * Increment)
+        let val2022 = scale["2022"].min + ((s - 1) * scale["2022"].inc);
+        
+        let btn = document.createElement('button');
+        btn.className = `btn btn-stage ${s === selectedStage ? 'active' : ''}`;
+        btn.innerHTML = `<small>Stage ${s}</small><br><b>Rs.${val2022.toLocaleString()}</b>`;
+        btn.onclick = () => {
+            document.querySelectorAll('.btn-stage').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedStage = s;
+            calculate();
+        };
+        container.appendChild(btn);
+    }
+    calculate();
+}
+
+function calculate() {
+    let scale = scaleDetails[selectedBps] || { 
+        "2022": { min: 0, inc: 0, max: 0 }, 
+        "2026": { min: 0, inc: 0, max: 0 } 
+    };
+    
+    // Formula based calculation jo dynamic har stage ka sahi nikalay gi
+    let val2022 = scale["2022"].min + ((selectedStage - 1) * scale["2022"].inc);
+    let val2026 = scale["2026"].min + ((selectedStage - 1) * scale["2026"].inc);
+    
+    let diff = val2026 - val2022;
+    let pct = val2022 > 0 ? ((diff / val2022) * 100).toFixed(1) : 0;
+
+    document.getElementById('comp-title').innerText = `BPS-${selectedBps} - STAGE ${selectedStage} PAY COMPARISON`;
+    document.getElementById('pay-2022').innerText = `Rs. ${val2022.toLocaleString()}`;
+    document.getElementById('pay-2026').innerText = `Rs. ${val2026.toLocaleString()}`;
+    document.getElementById('pay-diff').innerText = `+${diff.toLocaleString()} (${pct}% rise)`;
+
+    document.getElementById('details-2022').innerHTML = `<strong>2022 Scale</strong><br>Min: Rs. ${scale["2022"].min.toLocaleString()}<br>Increment: Rs. ${scale["2022"].inc.toLocaleString()}<br>Max: Rs. ${scale["2022"].max.toLocaleString()}<br>Total stages: ${scale["2022"].totalStages}`;
+    document.getElementById('details-2026').innerHTML = `<strong>2026 Scale</strong><br>Min: Rs. ${scale["2026"].min.toLocaleString()}<br>Increment: Rs. ${scale["2026"].inc.toLocaleString()}<br>Max: Rs. ${scale["2026"].max.toLocaleString()}<br>Total stages: ${scale["2026"].totalStages}`;
+}
+
+init();
+</script>
+</body>
+</html>
