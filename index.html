@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindh Government BPS Pay Scale Calculator</title>
+    <title>Sindh Government BPS Pay Scale Calculator 2022 vs 2026</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-        .calculator-card { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; }
+        .calculator-card { max-width: 900px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; }
         .header { background: #0056b3; color: white; padding: 20px; text-align: center; }
         .section { padding: 20px; border-bottom: 1px solid #eee; }
         .section-title { font-weight: bold; color: #333; margin-bottom: 15px; text-transform: uppercase; font-size: 14px; }
         .grid-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
         .btn { padding: 10px; border: 1px solid #ccc; background: #fff; cursor: pointer; text-align: center; border-radius: 4px; font-weight: bold; }
         .btn.active { background: #0056b3; color: white; border-color: #0056b3; }
-        .btn-stage { font-size: 11px; padding: 8px 5px; }
+        .btn-stage { font-size: 11px; padding: 8px 5px; line-height: 1.4; }
         .btn-stage.active { background: #28a745; color: white; border-color: #28a745; }
         .comparison-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
         .card { padding: 15px; text-align: center; border-radius: 6px; }
@@ -38,12 +38,12 @@
     </div>
 
     <div class="section">
-        <div class="section-title" id="stage-title">STEP 2: BPS-17 STAGES (2022 PAY)</div>
+        <div class="section-title" id="stage-title">STEP 2: BPS STAGES</div>
         <div class="grid-buttons" id="stages-container"></div>
     </div>
 
     <div class="section">
-        <div class="section-title" id="comp-title">BPS-17 - STAGE 6 PAY COMPARISON</div>
+        <div class="section-title" id="comp-title">PAY COMPARISON</div>
         <div class="comparison-cards">
             <div class="card card-blue">
                 <div>2022 Pay</div>
@@ -70,12 +70,30 @@
 </div>
 
 <script>
-// Formula ke liye exact structural scale data
+// Complete BPS-1 se BPS-22 tak ka Scale Data (2022 vs 2026 Estimated Revised Rates)
 const scaleDetails = {
-    "17": {
-        "2022": { min: 45070, inc: 3420, max: 113470, totalStages: 21 },
-        "2026": { min: 54133, inc: 4107, max: 136273, totalStages: 21 }
-    }
+    "1":  { "2022": { min: 13550, inc: 430, max: 26450, totalStages: 30 }, "2026": { min: 16260, inc: 516, max: 31740, totalStages: 30 } },
+    "2":  { "2022": { min: 13820, inc: 490, max: 28520, totalStages: 30 }, "2026": { min: 16584, inc: 588, max: 34224, totalStages: 30 } },
+    "3":  { "2022": { min: 14260, inc: 570, max: 31360, totalStages: 30 }, "2026": { min: 17112, inc: 684, max: 37632, totalStages: 30 } },
+    "4":  { "2022": { min: 14690, inc: 660, max: 34490, totalStages: 30 }, "2026": { min: 17628, inc: 792, max: 41388, totalStages: 30 } },
+    "5":  { "2022": { min: 15170, inc: 750, max: 37670, totalStages: 30 }, "2026": { min: 18204, inc: 900, max: 45204, totalStages: 30 } },
+    "6":  { "2022": { min: 15630, inc: 840, max: 40830, totalStages: 30 }, "2026": { min: 18756, inc: 1008, max: 48996, totalStages: 30 } },
+    "7":  { "2022": { min: 16090, inc: 930, max: 43990, totalStages: 30 }, "2026": { min: 19308, inc: 1116, max: 52788, totalStages: 30 } },
+    "8":  { "2022": { min: 16640, inc: 1040, max: 47840, totalStages: 30 }, "2026": { min: 19968, inc: 1248, max: 57408, totalStages: 30 } },
+    "9":  { "2022": { min: 17230, inc: 1150, max: 51730, totalStages: 30 }, "2026": { min: 20676, inc: 1380, max: 62076, totalStages: 30 } },
+    "10": { "2022": { min: 17790, inc: 1270, max: 55890, totalStages: 30 }, "2026": { min: 21348, inc: 1524, max: 67068, totalStages: 30 } },
+    "11": { "2022": { min: 18370, inc: 1420, max: 60970, totalStages: 30 }, "2026": { min: 22044, inc: 1704, max: 73164, totalStages: 30 } },
+    "12": { "2022": { min: 19350, inc: 1580, max: 66750, totalStages: 30 }, "2026": { min: 23220, inc: 1896, max: 80100, totalStages: 30 } },
+    "13": { "2022": { min: 20490, inc: 1770, max: 73590, totalStages: 30 }, "2026": { min: 24588, inc: 2124, max: 88308, totalStages: 30 } },
+    "14": { "2022": { min: 21710, inc: 1980, max: 81110, totalStages: 30 }, "2026": { min: 26052, inc: 2376, max: 97332, totalStages: 30 } },
+    "15": { "2022": { min: 23370, inc: 2250, max: 90870, totalStages: 30 }, "2026": { min: 28044, inc: 2700, max: 109044, totalStages: 30 } },
+    "16": { "2022": { min: 28070, inc: 2640, max: 107270, totalStages: 30 }, "2026": { min: 33684, inc: 3168, max: 128724, totalStages: 30 } },
+    "17": { "2022": { min: 45070, inc: 3420, max: 113470, totalStages: 21 }, "2026": { min: 54133, inc: 4107, max: 136273, totalStages: 21 } },
+    "18": { "2022": { min: 53560, inc: 4270, max: 138960, totalStages: 20 }, "2026": { min: 64272, inc: 5124, max: 166752, totalStages: 20 } },
+    "19": { "2022": { min: 87840, inc: 4730, max: 182440, totalStages: 20 }, "2026": { min: 105408, inc: 5676, max: 218928, totalStages: 20 } },
+    "20": { "2022": { min: 100740, inc: 6660, max: 193980, totalStages: 14 }, "2026": { min: 120888, inc: 7992, max: 232776, totalStages: 14 } },
+    "21": { "2022": { min: 111390, inc: 7420, max: 215270, totalStages: 14 }, "2026": { min: 133668, inc: 8904, max: 258324, totalStages: 14 } },
+    "22": { "2022": { min: 122190, inc: 8710, max: 244130, totalStages: 14 }, "2026": { min: 146628, inc: 10452, max: 292956, totalStages: 14 } }
 };
 
 let selectedBps = "17";
@@ -91,6 +109,7 @@ function init() {
             document.querySelectorAll('#bps-container .btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedBps = String(i); 
+            selectedStage = 1; // Grade change hone par default stage 1 set hogi
             renderStages(); 
         };
         bpsContainer.appendChild(btn);
@@ -107,7 +126,6 @@ function renderStages() {
     let totalStages = scale["2022"].totalStages;
 
     for (let s = 1; s <= totalStages; s++) {
-        // 2022 Pay Formula: Min + ((Stage - 1) * Increment)
         let val2022 = scale["2022"].min + ((s - 1) * scale["2022"].inc);
         
         let btn = document.createElement('button');
@@ -125,12 +143,8 @@ function renderStages() {
 }
 
 function calculate() {
-    let scale = scaleDetails[selectedBps] || { 
-        "2022": { min: 0, inc: 0, max: 0 }, 
-        "2026": { min: 0, inc: 0, max: 0 } 
-    };
+    let scale = scaleDetails[selectedBps];
     
-    // Formula based calculation jo dynamic har stage ka sahi nikalay gi
     let val2022 = scale["2022"].min + ((selectedStage - 1) * scale["2022"].inc);
     let val2026 = scale["2026"].min + ((selectedStage - 1) * scale["2026"].inc);
     
